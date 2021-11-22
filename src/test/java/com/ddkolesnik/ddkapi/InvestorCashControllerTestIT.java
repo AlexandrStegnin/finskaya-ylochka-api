@@ -1,6 +1,6 @@
 package com.ddkolesnik.ddkapi;
 
-import com.ddkolesnik.ddkapi.configuration.exception.ApiSuccessResponse;
+import com.ddkolesnik.ddkapi.configuration.response.ApiResponse;
 import com.ddkolesnik.ddkapi.dto.cash.InvestorCashDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
@@ -68,7 +68,7 @@ public class InvestorCashControllerTestIT {
         assertEquals(HttpStatus.OK.value(), status);
         String content = mvcResult.getResponse().getContentAsString();
         assertFalse(content.isEmpty(), NOT_MONEY_IN_RESPONSE_MSG);
-        ApiSuccessResponse successResponse = mapper.readValue(content, ApiSuccessResponse.class);
+        ApiResponse successResponse = mapper.readValue(content, ApiResponse.class);
         assertNotNull(successResponse, NOT_MONEY_IN_RESPONSE_MSG);
         assertEquals(HttpStatus.OK, successResponse.getStatus());
     }
@@ -89,7 +89,7 @@ public class InvestorCashControllerTestIT {
         assertEquals(HttpStatus.OK.value(), status);
         String content = mvcResult.getResponse().getContentAsString();
         assertFalse(content.isEmpty(), NOT_MONEY_IN_RESPONSE_MSG);
-        ApiSuccessResponse successResponse = mapper.readValue(content, ApiSuccessResponse.class);
+        ApiResponse successResponse = mapper.readValue(content, ApiResponse.class);
         assertNotNull(successResponse, NOT_MONEY_IN_RESPONSE_MSG);
         assertEquals(HttpStatus.OK, successResponse.getStatus());
     }

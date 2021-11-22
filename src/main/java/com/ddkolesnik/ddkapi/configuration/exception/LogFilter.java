@@ -13,16 +13,16 @@ import java.io.IOException;
 @Slf4j
 public class LogFilter implements Filter {
 
-    @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        try {
-            chain.doFilter(request, response);
-        } catch (Exception e) {
-            if (e instanceof RequestRejectedException) {
-                log.trace("Произошла ошибка RequestRejectedException...");
-                log.trace("Запрашиваемый URL: {}", request.getLocalAddr());
-            }
-            throw e;
-        }
+  @Override
+  public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+    try {
+      chain.doFilter(request, response);
+    } catch (RequestRejectedException e) {
+      log.trace("Произошла ошибка RequestRejectedException...");
+      log.trace("Запрашиваемый URL: {}", request.getLocalAddr());
+      throw e;
+    } catch (Exception e) {
+      log.error(e.getLocalizedMessage());
     }
+  }
 }

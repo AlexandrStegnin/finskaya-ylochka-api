@@ -1,8 +1,6 @@
 package com.ddkolesnik.ddkapi.controller.app;
 
 import com.ddkolesnik.ddkapi.configuration.annotation.ValidToken;
-import com.ddkolesnik.ddkapi.configuration.exception.ApiErrorResponse;
-import com.ddkolesnik.ddkapi.configuration.exception.ApiSuccessResponse;
 import com.ddkolesnik.ddkapi.dto.app.AppUserDTO;
 import com.ddkolesnik.ddkapi.service.app.AppUserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,7 +15,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,7 +30,6 @@ import static com.ddkolesnik.ddkapi.util.Constant.USERS;
 /**
  * @author Alexandr Stegnin
  */
-
 @SuppressWarnings("unused")
 @Slf4j
 @Validated
@@ -44,23 +40,23 @@ import static com.ddkolesnik.ddkapi.util.Constant.USERS;
 @Tag(name = "AppUser", description = "API для обновления информации о пользователях системы")
 public class AppUserController {
 
-    AppUserService appUserService;
+  AppUserService appUserService;
 
-    @Operation(summary = "Добавить/изменить пользователя", tags = {"AppUser"})
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Успешно",
-                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ApiSuccessResponse.class)))),
-            @ApiResponse(responseCode = "Error", description = "Произошла ошибка",
-                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ApiErrorResponse.class))))})
-    @PostMapping(path = UPDATE_USER, consumes = "application/x-www-form-urlencoded;charset=UTF-8",
-            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ApiSuccessResponse update(@Parameter(description = "Ключ приложения.", schema = @Schema(implementation = String.class))
-                             @PathVariable(name = "token") @ValidToken String token,
-                             @Parameter(description = "Пользователь", schema = @Schema(implementation = AppUserDTO.class))
-                             @Valid AppUserDTO appUser) {
-        appUserService.update(appUser);
-        log.info("Пользователь успешно обновлён [{}]", appUser);
-        return new ApiSuccessResponse(HttpStatus.OK, "Пользователь успешно сохранён");
-    }
+  @Operation(summary = "Добавить/изменить пользователя", tags = {"AppUser"})
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Успешно",
+          content = @Content(array = @ArraySchema(schema = @Schema(implementation = com.ddkolesnik.ddkapi.configuration.response.ApiResponse.class)))),
+      @ApiResponse(responseCode = "Error", description = "Произошла ошибка",
+          content = @Content(array = @ArraySchema(schema = @Schema(implementation = com.ddkolesnik.ddkapi.configuration.response.ApiResponse.class))))})
+  @PostMapping(path = UPDATE_USER, consumes = "application/x-www-form-urlencoded;charset=UTF-8",
+      produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+  public com.ddkolesnik.ddkapi.configuration.response.ApiResponse update(@Parameter(description = "Ключ приложения.", schema = @Schema(implementation = String.class))
+                                                                         @PathVariable(name = "token") @ValidToken String token,
+                                                                         @Parameter(description = "Пользователь", schema = @Schema(implementation = AppUserDTO.class))
+                                                                         @Valid AppUserDTO appUser) {
+    appUserService.update(appUser);
+    log.info("Пользователь успешно обновлён [{}]", appUser);
+    return com.ddkolesnik.ddkapi.configuration.response.ApiResponse.build200Response("Пользователь успешно сохранён");
+  }
 
 }

@@ -1,6 +1,6 @@
 package com.ddkolesnik.ddkapi;
 
-import com.ddkolesnik.ddkapi.configuration.exception.ApiSuccessResponse;
+import com.ddkolesnik.ddkapi.configuration.response.ApiResponse;
 import com.ddkolesnik.ddkapi.dto.cash.InvestorCashDTO;
 import com.ddkolesnik.ddkapi.model.app.AppUser;
 import com.ddkolesnik.ddkapi.model.app.UserProfile;
@@ -65,7 +65,7 @@ class InvestorCashServiceTest {
     dto.setInvestorSellerCode("987");
     dto.setInvestorCode("789");
     dto.setAccountingCode(AccountingCode.RESALE_SHARE.getCode());
-    ApiSuccessResponse response = investorCashService.update(dto);
+    ApiResponse response = investorCashService.update(dto);
     assertTrue(response.getStatus().is2xxSuccessful());
   }
 
@@ -117,7 +117,7 @@ class InvestorCashServiceTest {
   @Test
   void createMoneyTest() {
     InvestorCashDTO dto = getDTO();
-    ApiSuccessResponse response = investorCashService.update(dto);
+    ApiResponse response = investorCashService.update(dto);
     assertTrue(response.getStatus().is2xxSuccessful());
   }
 

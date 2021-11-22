@@ -4,6 +4,8 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 
+import java.time.Instant;
+
 /**
  * @author Alexandr Stegnin
  */
@@ -16,9 +18,10 @@ public class ApiResponse {
 
   String message;
   HttpStatus status;
+  Instant timestamp;
 
   public static ApiResponse build200Response(String message) {
-    return new ApiResponse(message, HttpStatus.OK);
+    return new ApiResponse(message, HttpStatus.OK, Instant.now());
   }
 
 }

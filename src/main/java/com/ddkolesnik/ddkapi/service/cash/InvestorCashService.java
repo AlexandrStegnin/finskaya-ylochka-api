@@ -1,6 +1,6 @@
 package com.ddkolesnik.ddkapi.service.cash;
 
-import com.ddkolesnik.ddkapi.configuration.exception.ApiSuccessResponse;
+import com.ddkolesnik.ddkapi.configuration.response.ApiResponse;
 import com.ddkolesnik.ddkapi.dto.cash.InvestorCashDTO;
 import com.ddkolesnik.ddkapi.model.cash.CashSource;
 import com.ddkolesnik.ddkapi.model.log.TransactionLog;
@@ -21,10 +21,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +49,6 @@ public class InvestorCashService {
   InvestorService investorService;
   FacilityService facilityService;
   CashSourceService cashSourceService;
-  SendMessageService messageService;
   TransactionLogService transactionLogService;
   UnderFacilityService underFacilityService;
   AccountTransactionService accountTransactionService;
@@ -57,58 +56,45 @@ public class InvestorCashService {
   CashingService cashingService;
   MoneyMapper moneyMapper;
 
-  public ApiSuccessResponse update(InvestorCashDTO dto) {
+  public ApiResponse update(InvestorCashDTO dto) {
     if (isBeforeFilteredDate(dto)) {
-      return new ApiSuccessResponse(HttpStatus.PRECONDITION_FAILED, "Старая проводка, операция невозможна");
+      return new ApiResponse("Старая проводка, операция невозможна", HttpStatus.PRECONDITION_FAILED, Instant.now());
     }
     AccountingCode code = AccountingCode.fromCode(dto.getAccountingCode());
     List<Money> monies = getByTransactionUUID(dto);
     if (isMoneyToDelete(dto, code, monies)) {
       monies.forEach(this::delete);
-      return new ApiSuccessResponse(HttpStatus.OK, SUCCESSFUL_SAVED);
+      return ApiResponse.build200Response(SUCCESSFUL_SAVED);
     }
     if (AccountingCode.isResale(code)) {
       resaleShareService.resaleShare(dto);
-      return new ApiSuccessResponse(HttpStatus.OK, SUCCESSFUL_SAVED);
+      return ApiResponse.build200Response(SUCCESSFUL_SAVED);
     }
     if (AccountingCode.isCashing(code)) {
       cashingService.cashing(dto);
-      return new ApiSuccessResponse(HttpStatus.OK, SUCCESSFUL_SAVED);
+      return ApiResponse.build200Response(SUCCESSFUL_SAVED);
     }
     Money money = monies.isEmpty() ? null : monies.get(0);
     if (Objects.nonNull(money)) {
       transactionLogService.update(money);
       update(money, dto);
-      return new ApiSuccessResponse(HttpStatus.OK, SUCCESSFUL_SAVED);
+      return ApiResponse.build200Response(SUCCESSFUL_SAVED);
     }
     money = moneyRepository.findMoney(dto.getDateGiven(), dto.getGivenCash(), dto.getFacility(),
         dto.getCashSource(), Constant.INVESTOR_PREFIX.concat(dto.getInvestorCode()));
     if (Objects.isNull(money)) {
       money = create(dto);
-      sendMessage(money.getInvestor());
       transactionLogService.create(money);
     } else {
       transactionLogService.update(money);
       update(money, dto);
     }
     log.info("Проводка успешно обновлена [{}]", dto);
-    return new ApiSuccessResponse(HttpStatus.OK, SUCCESSFUL_SAVED);
+    return ApiResponse.build200Response(SUCCESSFUL_SAVED);
   }
 
   private boolean isMoneyToDelete(InvestorCashDTO dto, AccountingCode code, List<Money> monies) {
     return dto.isDelete() && !monies.isEmpty() && Objects.isNull(code);
-  }
-
-  /**
-   * Отправка сообщения пользователю
-   *
-   * @param investor - инвестор
-   */
-  @Async
-  protected void sendMessage(final Investor investor) {
-    if (isFirstInvestment(investor.getId())) {
-      messageService.sendMessage(investor.getLogin());
-    }
   }
 
   /**

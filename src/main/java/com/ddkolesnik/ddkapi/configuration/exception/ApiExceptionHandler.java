@@ -1,5 +1,6 @@
 package com.ddkolesnik.ddkapi.configuration.exception;
 
+import com.ddkolesnik.ddkapi.configuration.response.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.SQLGrammarException;
 import org.springframework.dao.InvalidDataAccessResourceUsageException;
@@ -30,71 +31,73 @@ import static com.ddkolesnik.ddkapi.util.Constant.INVALID_APP_TOKEN;
 @RestControllerAdvice
 public class ApiExceptionHandler {
 
-    @ExceptionHandler({ApiException.class})
-    protected ResponseEntity<ApiErrorResponse> handleApiException(ApiException ex) {
-        return new ResponseEntity<>(new ApiErrorResponse(ex.getStatus(), ex.getMessage(), Instant.now()), ex.getStatus());
-    }
+  private static final String DATABASE_ERROR = "Ошибка базы данных: {}";
 
-    @ExceptionHandler
-    public ResponseEntity<ApiErrorResponse> handle(ConstraintViolationException exception) {
-        String errorMessage = new ArrayList<>(exception.getConstraintViolations())
-                .stream()
-                .map(ConstraintViolation::getMessage)
-                .collect(Collectors.joining("; "));
-        HttpStatus status;
-        if (errorMessage.equalsIgnoreCase(INVALID_APP_TOKEN)) {
-            status = HttpStatus.FORBIDDEN;
-        } else {
-            status = HttpStatus.BAD_REQUEST;
-        }
-        ApiErrorResponse apiErrorResponse = new ApiErrorResponse(status, errorMessage, Instant.now());
-        return new ResponseEntity<>(apiErrorResponse, status);
-    }
+  @ExceptionHandler({ApiException.class})
+  protected ResponseEntity<ApiResponse> handleApiException(ApiException ex) {
+    return new ResponseEntity<>(new ApiResponse(ex.getMessage(), ex.getStatus(), Instant.now()), ex.getStatus());
+  }
 
-    @ExceptionHandler
-    public ResponseEntity<ApiErrorResponse> handle(MethodArgumentNotValidException ex) {
-        String message = ex.getBindingResult().getFieldErrors()
-                .stream()
-                .collect(Collectors.toMap(FieldError::getField, Objects.requireNonNull(FieldError::getDefaultMessage)))
-                .entrySet()
-                .stream()
-                .map(entrySet -> entrySet.getKey() + ": " + entrySet.getValue()).
-                        collect(Collectors.joining(",\n"));
-        ApiErrorResponse apiErrorResponse = new ApiErrorResponse(HttpStatus.BAD_REQUEST, message, Instant.now());
-        return new ResponseEntity<>(apiErrorResponse, HttpStatus.BAD_REQUEST);
+  @ExceptionHandler
+  public ResponseEntity<ApiResponse> handle(ConstraintViolationException exception) {
+    String errorMessage = new ArrayList<>(exception.getConstraintViolations())
+        .stream()
+        .map(ConstraintViolation::getMessage)
+        .collect(Collectors.joining("; "));
+    HttpStatus status;
+    if (errorMessage.equalsIgnoreCase(INVALID_APP_TOKEN)) {
+      status = HttpStatus.FORBIDDEN;
+    } else {
+      status = HttpStatus.BAD_REQUEST;
     }
+    ApiResponse apiErrorResponse = new ApiResponse(errorMessage, status, Instant.now());
+    return new ResponseEntity<>(apiErrorResponse, status);
+  }
 
-    @ExceptionHandler
-    public void handle(RequestRejectedException e) {
-        log.warn("Запрос отклонён: {}", e.getLocalizedMessage());
-    }
+  @ExceptionHandler
+  public ResponseEntity<ApiResponse> handle(MethodArgumentNotValidException ex) {
+    String message = ex.getBindingResult().getFieldErrors()
+        .stream()
+        .collect(Collectors.toMap(FieldError::getField, Objects.requireNonNull(FieldError::getDefaultMessage)))
+        .entrySet()
+        .stream()
+        .map(entrySet -> entrySet.getKey() + ": " + entrySet.getValue()).
+        collect(Collectors.joining(",\n"));
+    ApiResponse apiErrorResponse = new ApiResponse(message, HttpStatus.BAD_REQUEST, Instant.now());
+    return new ResponseEntity<>(apiErrorResponse, HttpStatus.BAD_REQUEST);
+  }
 
-    @ExceptionHandler
-    public void handle(IllegalArgumentException e) {
-        log.warn("Произошла ошибка: {}", e.getLocalizedMessage());
-    }
+  @ExceptionHandler
+  public void handle(RequestRejectedException e) {
+    log.warn("Запрос отклонён: {}", e.getLocalizedMessage());
+  }
 
-    @ExceptionHandler({SQLSyntaxErrorException.class, InvalidDataAccessResourceUsageException.class, SQLGrammarException.class})
-    public void handle(InvalidDataAccessResourceUsageException e) {
-        log.warn("Ошибка базы данных: {}", e.getLocalizedMessage());
-    }
+  @ExceptionHandler
+  public void handle(IllegalArgumentException e) {
+    log.warn("Произошла ошибка: {}", e.getLocalizedMessage());
+  }
 
-    @ExceptionHandler({
-            org.springframework.web.HttpRequestMethodNotSupportedException.class,
-            org.springframework.web.HttpMediaTypeNotAcceptableException.class
-    })
-    public void handle(HttpRequestMethodNotSupportedException e) {
-        log.warn("Неподдерживаемый метод: {}", e.getLocalizedMessage());
-    }
+  @ExceptionHandler({SQLSyntaxErrorException.class, InvalidDataAccessResourceUsageException.class, SQLGrammarException.class})
+  public void handle(InvalidDataAccessResourceUsageException e) {
+    log.warn(DATABASE_ERROR, e.getLocalizedMessage());
+  }
 
-    @ExceptionHandler
-    public void handle(org.hibernate.exception.ConstraintViolationException exception) {
-        log.error("Ошибка базы данных: {}", exception.getSQLException().getLocalizedMessage());
-    }
+  @ExceptionHandler({
+      org.springframework.web.HttpRequestMethodNotSupportedException.class,
+      org.springframework.web.HttpMediaTypeNotAcceptableException.class
+  })
+  public void handle(HttpRequestMethodNotSupportedException e) {
+    log.warn("Неподдерживаемый метод: {}", e.getLocalizedMessage());
+  }
 
-    @ExceptionHandler
-    public void handle(org.hibernate.HibernateException exception) {
-        log.error("Ошибка базы данных: {}", exception.getLocalizedMessage());
-    }
+  @ExceptionHandler
+  public void handle(org.hibernate.exception.ConstraintViolationException exception) {
+    log.error(DATABASE_ERROR, exception.getSQLException().getLocalizedMessage());
+  }
+
+  @ExceptionHandler
+  public void handle(org.hibernate.HibernateException exception) {
+    log.error(DATABASE_ERROR, exception.getLocalizedMessage());
+  }
 
 }

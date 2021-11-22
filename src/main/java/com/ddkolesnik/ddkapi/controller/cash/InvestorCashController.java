@@ -1,8 +1,6 @@
 package com.ddkolesnik.ddkapi.controller.cash;
 
 import com.ddkolesnik.ddkapi.configuration.annotation.ValidToken;
-import com.ddkolesnik.ddkapi.configuration.exception.ApiErrorResponse;
-import com.ddkolesnik.ddkapi.configuration.exception.ApiSuccessResponse;
 import com.ddkolesnik.ddkapi.dto.cash.InvestorCashDTO;
 import com.ddkolesnik.ddkapi.service.cash.InvestorCashService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -48,11 +46,11 @@ public class InvestorCashController {
     @Operation(summary = "Создание проводки на основании данных из 1С", tags = {"InvestorCash"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Успешно",
-                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ApiSuccessResponse.class)))),
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = com.ddkolesnik.ddkapi.configuration.response.ApiResponse.class)))),
             @ApiResponse(responseCode = "Error", description = "Произошла ошибка",
-                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ApiErrorResponse.class))))})
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = com.ddkolesnik.ddkapi.configuration.response.ApiResponse.class))))})
     @PostMapping(value = PATH_INVESTOR_CASH_UPDATE, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ApiSuccessResponse createInvestorCash(@Parameter(description = "Ключ приложения.", schema = @Schema(implementation = String.class))
+    public com.ddkolesnik.ddkapi.configuration.response.ApiResponse createInvestorCash(@Parameter(description = "Ключ приложения.", schema = @Schema(implementation = String.class))
                                                  @PathVariable(name = "token") @ValidToken String token,
                                                  @Parameter(description = "Проводка из 1С", schema = @Schema(implementation = InvestorCashDTO.class))
                                                  @Valid @RequestBody InvestorCashDTO dto) {

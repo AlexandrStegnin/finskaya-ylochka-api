@@ -6,6 +6,7 @@ import org.hibernate.exception.SQLGrammarException;
 import org.springframework.dao.InvalidDataAccessResourceUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.web.firewall.RequestRejectedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -105,6 +106,13 @@ public class ApiExceptionHandler {
   @ExceptionHandler
   public void handle(org.hibernate.HibernateException exception) {
     log.error(DATABASE_ERROR, exception.getLocalizedMessage());
+  }
+
+  @ExceptionHandler
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public ResponseEntity<ApiResponse> handle(HttpMessageNotReadableException e) {
+    log.error("Произошла ошибка {}", e.getLocalizedMessage());
+    return new ResponseEntity<>(ApiResponse.build400Response(e.getLocalizedMessage()), HttpStatus.BAD_REQUEST);
   }
 
 }

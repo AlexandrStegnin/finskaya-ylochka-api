@@ -24,4 +24,8 @@ public class ApiResponse {
     return new ApiResponse(message, HttpStatus.OK, Instant.now());
   }
 
+  public static ApiResponse build400Response(String message) {
+    return new ApiResponse(message, HttpStatus.BAD_REQUEST, Instant.now());
+  }
+
 }

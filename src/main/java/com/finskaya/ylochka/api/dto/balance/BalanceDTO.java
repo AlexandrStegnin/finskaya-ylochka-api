@@ -1,4 +1,4 @@
-package com.finskaya.ylochka.api.dto.money;
+package com.finskaya.ylochka.api.dto.balance;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;

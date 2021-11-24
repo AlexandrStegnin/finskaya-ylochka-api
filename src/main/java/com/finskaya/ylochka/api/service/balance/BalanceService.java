@@ -1,14 +1,14 @@
-package com.finskaya.ylochka.api.service.cash;
+package com.finskaya.ylochka.api.service.balance;
 
 import com.finskaya.ylochka.api.configuration.exception.PhoneNotFoundException;
-import com.finskaya.ylochka.api.dto.money.BalanceDTO;
-import com.finskaya.ylochka.api.dto.money.InvestmentDTO;
+import com.finskaya.ylochka.api.dto.balance.BalanceDTO;
+import com.finskaya.ylochka.api.dto.balance.InvestmentDTO;
 import com.finskaya.ylochka.api.mapper.InvestorInvestmentMapper;
-import com.finskaya.ylochka.api.model.app.InvestorBalance;
-import com.finskaya.ylochka.api.model.app.InvestorInvestment;
+import com.finskaya.ylochka.api.model.balance.InvestorBalance;
+import com.finskaya.ylochka.api.model.balance.InvestorInvestment;
 import com.finskaya.ylochka.api.model.app.Phone;
-import com.finskaya.ylochka.api.repository.app.InvestorBalanceRepository;
-import com.finskaya.ylochka.api.repository.app.InvestorInvestmentRepository;
+import com.finskaya.ylochka.api.repository.balance.InvestorBalanceRepository;
+import com.finskaya.ylochka.api.repository.balance.InvestorInvestmentRepository;
 import com.finskaya.ylochka.api.repository.app.PhoneRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

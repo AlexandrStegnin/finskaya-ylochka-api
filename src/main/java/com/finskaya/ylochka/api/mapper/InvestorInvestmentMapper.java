@@ -1,8 +1,8 @@
 package com.finskaya.ylochka.api.mapper;
 
 import com.finskaya.ylochka.api.configuration.mapper.MapStructConfig;
-import com.finskaya.ylochka.api.dto.money.InvestmentDTO;
-import com.finskaya.ylochka.api.model.app.InvestorInvestment;
+import com.finskaya.ylochka.api.dto.balance.InvestmentDTO;
+import com.finskaya.ylochka.api.model.balance.InvestorInvestment;
 import org.mapstruct.Mapper;
 import org.springframework.stereotype.Component;
 

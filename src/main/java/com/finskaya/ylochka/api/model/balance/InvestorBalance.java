@@ -1,4 +1,4 @@
-package com.finskaya.ylochka.api.model.app;
+package com.finskaya.ylochka.api.model.balance;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -17,18 +17,18 @@ import java.math.BigDecimal;
 @Data
 @Entity
 @Immutable
-@Table(name = "investor_investment")
+@Table(name = "investor_balance")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class InvestorInvestment {
+public class InvestorBalance {
 
   @Id
   @Column(name = "investor_id")
   Long investorId;
 
-  @Column(name = "project")
-  String project;
+  @Column(name = "account_number")
+  String accountNumber;
 
-  @Column(name = "sum")
-  BigDecimal sum;
+  @Column(name = "free_cash")
+  BigDecimal freeCash;
 
 }

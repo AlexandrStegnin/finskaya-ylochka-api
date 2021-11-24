@@ -1,4 +1,4 @@
-package com.finskaya.ylochka.api.dto.money;
+package com.finskaya.ylochka.api.dto.balance;
 
 import lombok.AccessLevel;
 import lombok.Data;

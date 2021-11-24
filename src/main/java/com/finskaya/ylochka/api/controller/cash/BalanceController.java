@@ -1,8 +1,8 @@
-package com.finskaya.ylochka.api.controller.app;
+package com.finskaya.ylochka.api.controller.cash;
 
 import com.finskaya.ylochka.api.configuration.annotation.ValidToken;
-import com.finskaya.ylochka.api.dto.money.BalanceDTO;
-import com.finskaya.ylochka.api.service.cash.BalanceService;
+import com.finskaya.ylochka.api.dto.balance.BalanceDTO;
+import com.finskaya.ylochka.api.service.balance.BalanceService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AccessLevel;

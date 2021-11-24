@@ -1,6 +1,6 @@
-package com.finskaya.ylochka.api.repository.app;
+package com.finskaya.ylochka.api.repository.balance;
 
-import com.finskaya.ylochka.api.model.app.InvestorBalance;
+import com.finskaya.ylochka.api.model.balance.InvestorBalance;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

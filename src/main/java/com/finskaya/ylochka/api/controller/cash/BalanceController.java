@@ -4,7 +4,6 @@ import com.finskaya.ylochka.api.configuration.annotation.ValidToken;
 import com.finskaya.ylochka.api.dto.balance.BalanceDTO;
 import com.finskaya.ylochka.api.service.balance.BalanceService;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -25,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/{token}/users")
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-@Tag(name = "AppUser", description = "API для получении информации о балансе инвестора")
 public class BalanceController {
 
   BalanceService balanceService;

@@ -3,6 +3,7 @@ package com.finskaya.ylochka.api.controller.app;
 import com.finskaya.ylochka.api.configuration.annotation.ValidToken;
 import com.finskaya.ylochka.api.dto.money.BalanceDTO;
 import com.finskaya.ylochka.api.service.cash.BalanceService;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,9 @@ public class BalanceController {
   @GetMapping(path = "/{phone}",
       consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public BalanceDTO fetchBalance(@PathVariable(name = "token") @ValidToken String token,
+  public BalanceDTO fetchBalance(@Parameter(description = "ключ приложения")
+                                 @PathVariable(name = "token") @ValidToken String token,
+                                 @Parameter(description = "телефон клиента")
                                  @PathVariable(name = "phone") String phone) {
     return balanceService.fetchInvestorBalance(phone);
   }

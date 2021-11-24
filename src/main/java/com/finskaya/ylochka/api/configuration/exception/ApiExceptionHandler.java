@@ -11,6 +11,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.validation.ConstraintViolation;
@@ -35,6 +36,12 @@ public class ApiExceptionHandler {
 
   @ExceptionHandler({ApiException.class})
   protected ResponseEntity<ApiResponse> handleApiException(ApiException ex) {
+    return new ResponseEntity<>(new ApiResponse(ex.getMessage(), ex.getStatus(), Instant.now()), ex.getStatus());
+  }
+
+  @ExceptionHandler(PhoneNotFoundException.class)
+  @ResponseStatus(HttpStatus.NOT_FOUND)
+  protected ResponseEntity<ApiResponse> handlePhoneNotFoundException(PhoneNotFoundException ex) {
     return new ResponseEntity<>(new ApiResponse(ex.getMessage(), ex.getStatus(), Instant.now()), ex.getStatus());
   }
 

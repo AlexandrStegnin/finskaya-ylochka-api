@@ -1,6 +1,6 @@
 package com.finskaya.ylochka.api.service.cash;
 
-import com.finskaya.ylochka.api.configuration.exception.ApiException;
+import com.finskaya.ylochka.api.configuration.exception.PhoneNotFoundException;
 import com.finskaya.ylochka.api.dto.money.BalanceDTO;
 import com.finskaya.ylochka.api.dto.money.InvestmentDTO;
 import com.finskaya.ylochka.api.mapper.InvestorInvestmentMapper;
@@ -14,7 +14,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -47,7 +46,7 @@ public class BalanceService {
     var phone = phoneRepository.findByNumber(phoneNumber);
     if (Objects.isNull(phone)) {
       log.error("Phone not found {}", phoneNumber);
-      throw new ApiException("Phone not found", HttpStatus.NOT_FOUND);
+      throw new PhoneNotFoundException("Phone not found");
     }
     return phone;
   }

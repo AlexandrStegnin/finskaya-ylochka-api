@@ -9,7 +9,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,9 +30,7 @@ public class BalanceController {
 
   BalanceService balanceService;
 
-  @GetMapping(path = "/{phone}",
-      consumes = MediaType.APPLICATION_JSON_VALUE,
-      produces = MediaType.APPLICATION_JSON_VALUE)
+  @GetMapping(path = "/{phone}")
   public BalanceDTO fetchBalance(@Parameter(description = "ключ приложения")
                                  @PathVariable(name = "token") @ValidToken String token,
                                  @Parameter(description = "телефон клиента")

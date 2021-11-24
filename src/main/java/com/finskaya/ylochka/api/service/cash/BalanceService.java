@@ -36,6 +36,7 @@ public class BalanceService {
   InvestorInvestmentRepository investorInvestmentRepository;
 
   public BalanceDTO fetchInvestorBalance(String phoneNumber) {
+    log.info("Fetch investor balance by phone {}", phoneNumber);
     var phone = findPhone(phoneNumber);
     var investorBalance = investorBalanceRepository.findByInvestorId(phone.getInvestorId());
     var investorInvestments = investorInvestmentRepository.findByInvestorId(phone.getInvestorId());
@@ -45,7 +46,8 @@ public class BalanceService {
   private Phone findPhone(String phoneNumber) {
     var phone = phoneRepository.findByNumber(phoneNumber);
     if (Objects.isNull(phone)) {
-      throw new ApiException("Телефон не найден", HttpStatus.NOT_FOUND);
+      log.error("Phone not found {}", phoneNumber);
+      throw new ApiException("Phone not found", HttpStatus.NOT_FOUND);
     }
     return phone;
   }

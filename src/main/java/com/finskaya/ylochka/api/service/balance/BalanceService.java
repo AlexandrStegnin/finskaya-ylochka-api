@@ -35,8 +35,8 @@ public class BalanceService {
   InvestorInvestmentRepository investorInvestmentRepository;
 
   public BalanceDTO fetchInvestorBalance(String phoneNumber) {
-    log.info("Fetch investor balance by phone {}", phoneNumber);
     var phone = findPhone(phoneNumber);
+    log.info("Fetch investor balance by phone {}", phoneNumber);
     var investorBalance = investorBalanceRepository.findByInvestorId(phone.getInvestorId());
     var investorInvestments = investorInvestmentRepository.findByInvestorId(phone.getInvestorId());
     return mapToBalanceDTO(investorBalance, investorInvestments, phone);

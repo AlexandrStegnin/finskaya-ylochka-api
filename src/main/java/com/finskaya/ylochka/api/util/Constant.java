@@ -20,13 +20,13 @@ public class Constant {
   public static final String INVALID_APP_TOKEN = "Неверный ключ приложения.";
 
   // API PATHS
-  public static final String[] API_HTTP_MATCHERS = {
+  public final String[] API_HTTP_MATCHERS = {
       "/api/v1/**"
   };
 
   // IGNORING access to Spring Security
 
-  public static final String[] ALL_HTTP_MATCHERS = {
+  public final String[] ALL_HTTP_MATCHERS = {
       "/VAADIN/**", "/HEARTBEAT/**", "/UIDL/**", "/resources/**",
       "/manifest.json", "/icons/**", "/images/**",
       // (development mode) static resources
@@ -39,6 +39,6 @@ public class Constant {
       "/frontend-es5/**", "/frontend-es6/**"
   };
 
-  public static final String[] ALL_SWAGGER_MATCHERS = {"/v3/api-docs*", "/configuration/**", "/swagger*/**", "/webjars/**", "/", "/info"};
+  public final String[] ALL_SWAGGER_MATCHERS = {"/v3/api-docs/**", "/configuration/**", "/swagger-ui/**", "/webjars/**", "/"};
 
 }

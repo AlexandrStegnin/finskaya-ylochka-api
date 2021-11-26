@@ -23,6 +23,7 @@
         <hibernate-jpamodelgen.version>5.6.1.Final</hibernate-jpamodelgen.version>
         <springdoc-openapi-ui.version>1.5.12</springdoc-openapi-ui.version>
         <jjwt.version>0.9.1</jjwt.version>
+        <apache.commons.version>4.4</apache.commons.version>
     </properties>
 
     <dependencies>
@@ -110,6 +111,12 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok-mapstruct-binding</artifactId>
             <version>${lombok.mapstruct.binding.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>${apache.commons.version}</version>
         </dependency>
     </dependencies>
 

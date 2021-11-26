@@ -31,7 +31,7 @@ public class BalanceController {
   @GetMapping(path = "/{investorId}")
   public BalanceDTO fetchBalance(@Parameter(description = "ключ приложения")
                                  @PathVariable(name = "token") @ValidToken String token,
-                                 @Parameter(description = "телефон клиента")
+                                 @Parameter(description = "id клиента")
                                  @PathVariable(name = "investorId") Long investorId) {
     return balanceService.fetchInvestorBalance(investorId);
   }

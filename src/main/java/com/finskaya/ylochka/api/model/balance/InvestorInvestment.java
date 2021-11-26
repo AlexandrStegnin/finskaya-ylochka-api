@@ -22,6 +22,8 @@ import java.math.BigDecimal;
 public class InvestorInvestment {
 
   @Id
+  String uuid;
+
   @Column(name = "investor_id")
   Long investorId;
 

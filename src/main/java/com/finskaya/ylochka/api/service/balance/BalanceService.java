@@ -34,18 +34,18 @@ public class BalanceService {
   InvestorBalanceRepository investorBalanceRepository;
   InvestorInvestmentRepository investorInvestmentRepository;
 
-  public BalanceDTO fetchInvestorBalance(String phoneNumber) {
-    var phone = findPhone(phoneNumber);
-    log.info("Fetch investor balance by phone {}", phoneNumber);
-    var investorBalance = investorBalanceRepository.findByInvestorId(phone.getInvestorId());
-    var investorInvestments = investorInvestmentRepository.findByInvestorId(phone.getInvestorId());
+  public BalanceDTO fetchInvestorBalance(Long investorId) {
+    var phone = findPhone(investorId);
+    log.info("Fetch investor balance by phone {}", phone.getNumber());
+    var investorBalance = investorBalanceRepository.findByInvestorId(investorId);
+    var investorInvestments = investorInvestmentRepository.findByInvestorId(investorId);
     return mapToBalanceDTO(investorBalance, investorInvestments, phone);
   }
 
-  private Phone findPhone(String phoneNumber) {
-    var phone = phoneRepository.findByNumber(phoneNumber);
+  private Phone findPhone(Long investorId) {
+    var phone = phoneRepository.findByInvestorId(investorId);
     if (Objects.isNull(phone)) {
-      log.error("Phone not found {}", phoneNumber);
+      log.error("Phone not found");
       throw new PhoneNotFoundException("Phone not found");
     }
     return phone;

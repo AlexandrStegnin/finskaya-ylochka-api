@@ -18,7 +18,8 @@ import java.math.BigDecimal;
 public class Project {
 
   @Id
-  Long id;
+  String uuid;
+  Long projectId;
   String name;
   BigDecimal cost;
   BigDecimal invested;

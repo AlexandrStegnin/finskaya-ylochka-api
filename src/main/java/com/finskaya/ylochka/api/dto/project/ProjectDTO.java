@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ProjectDTO {
 
-  Long id;
+  Long projectId;
   String name;
   BigDecimal cost;
   BigDecimal invested;

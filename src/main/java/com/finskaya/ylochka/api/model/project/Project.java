@@ -3,6 +3,7 @@ package com.finskaya.ylochka.api.model.project;
 import lombok.Data;
 import org.hibernate.annotations.Immutable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -19,6 +20,7 @@ public class Project {
 
   @Id
   String uuid;
+  @Column(name = "project_id")
   Long projectId;
   String name;
   BigDecimal cost;

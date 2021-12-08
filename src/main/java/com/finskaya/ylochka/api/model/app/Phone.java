@@ -1,7 +1,6 @@
 package com.finskaya.ylochka.api.model.app;
 
-import lombok.AccessLevel;
-import lombok.Data;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -12,6 +11,9 @@ import javax.persistence.*;
  */
 @Data
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "phone")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Phone {

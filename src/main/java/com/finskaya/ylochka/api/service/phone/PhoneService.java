@@ -26,4 +26,8 @@ public class PhoneService {
     return phoneMapper.toDTO(phones);
   }
 
+  public void save(PhoneDTO dto) {
+    phoneRepository.save(phoneMapper.toEntity(dto));
+  }
+
 }

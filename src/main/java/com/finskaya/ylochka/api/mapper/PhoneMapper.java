@@ -25,6 +25,17 @@ public class PhoneMapper {
   UserMapper userMapper;
   UserRepository userRepository;
 
+  public Phone toEntity(PhoneDTO dto) {
+    var investorId = dto.getInvestors().stream()
+        .findAny()
+        .map(InvestorDTO::getId)
+        .orElse(null);
+    return Phone.builder()
+        .investorId(investorId)
+        .number(dto.getPhone())
+        .build();
+  }
+
   public PhoneDTO toDTO(List<Phone> entities) {
     return PhoneDTO.builder()
         .phone(mapPhone(entities))

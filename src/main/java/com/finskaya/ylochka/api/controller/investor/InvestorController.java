@@ -1,7 +1,10 @@
 package com.finskaya.ylochka.api.controller.investor;
 
 import com.finskaya.ylochka.api.configuration.annotation.ValidToken;
+import com.finskaya.ylochka.api.dto.app.CreateUserDTO;
+import com.finskaya.ylochka.api.dto.balance.InvestorDTO;
 import com.finskaya.ylochka.api.dto.phone.PhoneDTO;
+import com.finskaya.ylochka.api.service.app.InvestorService;
 import com.finskaya.ylochka.api.service.phone.PhoneService;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.AccessLevel;
@@ -9,10 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Alexandr Stegnin
@@ -27,12 +27,21 @@ import org.springframework.web.bind.annotation.RestController;
 public class InvestorController {
 
   PhoneService phoneService;
+  InvestorService investorService;
 
   @GetMapping(path = "/{phone}")
   public PhoneDTO fetchInvestorsByPhone(@Parameter(description = "ключ приложения")
-                                      @PathVariable(name = "token") @ValidToken String token,
+                                        @PathVariable(name = "token") @ValidToken String token,
                                         @Parameter(description = "телефон клиента")
-                                      @PathVariable(name = "phone") String phone) {
+                                        @PathVariable(name = "phone") String phone) {
     return phoneService.findInvestorsByPhoneNumber(phone);
   }
+
+  @PostMapping
+  public InvestorDTO createInvestor(@Parameter(description = "ключ приложения")
+                                    @PathVariable(name = "token") @ValidToken String token,
+                                    @RequestBody CreateUserDTO dto) {
+    return investorService.create(dto);
+  }
+
 }

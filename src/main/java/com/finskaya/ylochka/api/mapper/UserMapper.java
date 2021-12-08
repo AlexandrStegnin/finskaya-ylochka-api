@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Mapper(config = MapStructConfig.class)
-public interface InvestorMapper {
+public interface UserMapper {
 
   InvestorDTO toInvestorDTO(User entity);
 

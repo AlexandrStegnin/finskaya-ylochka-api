@@ -3,7 +3,7 @@ package com.finskaya.ylochka.api.mapper;
 import com.finskaya.ylochka.api.dto.balance.InvestorDTO;
 import com.finskaya.ylochka.api.dto.phone.PhoneDTO;
 import com.finskaya.ylochka.api.model.app.Phone;
-import com.finskaya.ylochka.api.repository.investor.InvestorRepository;
+import com.finskaya.ylochka.api.repository.investor.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -22,8 +22,8 @@ import java.util.stream.Collectors;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class PhoneMapper {
 
-  InvestorMapper investorMapper;
-  InvestorRepository investorRepository;
+  UserMapper userMapper;
+  UserRepository userRepository;
 
   public PhoneDTO toDTO(List<Phone> entities) {
     return PhoneDTO.builder()
@@ -41,8 +41,8 @@ public class PhoneMapper {
 
   private List<InvestorDTO> mapInvestors(List<Phone> entities) {
     return entities.stream()
-        .map(phone -> investorRepository.getById(phone.getInvestorId()))
-        .map(investorMapper::toInvestorDTO)
+        .map(phone -> userRepository.getById(phone.getInvestorId()))
+        .map(userMapper::toInvestorDTO)
         .collect(Collectors.toList());
   }
 

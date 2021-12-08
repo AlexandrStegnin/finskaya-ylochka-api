@@ -46,6 +46,12 @@ public class ApiExceptionHandler {
     return new ResponseEntity<>(new ApiResponse(ex.getMessage(), ex.getStatus(), Instant.now()), ex.getStatus());
   }
 
+  @ExceptionHandler(PhoneAlreadyExistsException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  protected ResponseEntity<ApiResponse> handlePhoneAlreadyExistsException(PhoneAlreadyExistsException ex) {
+    return new ResponseEntity<>(new ApiResponse(ex.getMessage(), ex.getStatus(), Instant.now()), ex.getStatus());
+  }
+
   @ExceptionHandler
   public ResponseEntity<ApiResponse> handle(ConstraintViolationException exception) {
     String errorMessage = new ArrayList<>(exception.getConstraintViolations())

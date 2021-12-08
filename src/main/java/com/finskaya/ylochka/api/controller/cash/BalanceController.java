@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -21,19 +20,26 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @Validated
 @RestController
-@RequestMapping("/api/v1/{token}/users")
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class BalanceController {
 
   BalanceService balanceService;
 
-  @GetMapping(path = "/{investorId}")
+  @GetMapping(path = "/api/v2/{token}/users/{investorId}")
   public BalanceDTO fetchBalance(@Parameter(description = "ключ приложения")
                                  @PathVariable(name = "token") @ValidToken String token,
                                  @Parameter(description = "id клиента")
                                  @PathVariable(name = "investorId") Long investorId) {
     return balanceService.fetchInvestorBalance(investorId);
+  }
+
+  @GetMapping(path = "/api/v1/{token}/users/{phone}")
+  public BalanceDTO fetchBalanceV1(@Parameter(description = "ключ приложения")
+                                   @PathVariable(name = "token") @ValidToken String token,
+                                   @Parameter(description = "телефон клиента")
+                                   @PathVariable(name = "phone") String phone) {
+    return balanceService.fetchInvestorBalance(phone);
   }
 
 }

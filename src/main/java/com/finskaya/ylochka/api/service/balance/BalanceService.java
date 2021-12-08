@@ -29,6 +29,8 @@ import java.util.stream.Collectors;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class BalanceService {
 
+  private static final String PHONE_NOT_FOUND_MESSAGE = "Phone not found";
+
   InvestorInvestmentMapper investorInvestmentMapper;
   PhoneRepository phoneRepository;
   InvestorBalanceRepository investorBalanceRepository;
@@ -42,11 +44,28 @@ public class BalanceService {
     return mapToBalanceDTO(investorBalance, investorInvestments, phone);
   }
 
+  public BalanceDTO fetchInvestorBalance(String phoneNumber) {
+    var phone = findPhone(phoneNumber);
+    log.info("Fetch investor balance by phone {}", phoneNumber);
+    var investorBalance = investorBalanceRepository.findByInvestorId(phone.getInvestorId());
+    var investorInvestments = investorInvestmentRepository.findByInvestorId(phone.getInvestorId());
+    return mapToBalanceDTO(investorBalance, investorInvestments, phone);
+  }
+
+  private Phone findPhone(String phoneNumber) {
+    var phone = phoneRepository.findByNumber(phoneNumber);
+    if (Objects.isNull(phone) || phone.isEmpty()) {
+      log.error("Phone not found {}", phoneNumber);
+      throw new PhoneNotFoundException(PHONE_NOT_FOUND_MESSAGE);
+    }
+    return phone.get(0);
+  }
+
   private Phone findPhone(Long investorId) {
     var phone = phoneRepository.findByInvestorId(investorId);
     if (Objects.isNull(phone)) {
-      log.error("Phone not found");
-      throw new PhoneNotFoundException("Phone not found");
+      log.error(PHONE_NOT_FOUND_MESSAGE);
+      throw new PhoneNotFoundException(PHONE_NOT_FOUND_MESSAGE);
     }
     return phone;
   }

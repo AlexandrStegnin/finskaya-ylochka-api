@@ -21,7 +21,8 @@ public class Constant {
 
   // API PATHS
   public final String[] API_HTTP_MATCHERS = {
-      "/api/v1/**"
+      "/api/v1/**",
+      "/api/v2/**"
   };
 
   // IGNORING access to Spring Security
